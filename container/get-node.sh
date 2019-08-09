@@ -52,7 +52,7 @@ case "$URL" in
     ;;
 esac
 
-cp -f "$(find . -name geth)" . 2>/dev/null
+cp -f "$(find . -name geth-linux-amd64)" ./geth 2>/dev/null
 
 printf "%s" "$(printf "%s" "$GIT_INFO" | jq .tag_name -r | sed 's\v\\')" > ./version
 
