@@ -17,27 +17,21 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 #  Contact: cryi@tutanota.com
+
 BASEDIR=$(dirname "$0")
 
-INNER_UID=10002
-target_uid=$(grep "dockremap" /etc/subuid)
-target_uid=$(echo "$target_uid" | cut -d ":" -f 2)
-INNER_UID=$(($target_uid + $INNER_UID))
+if [ -f "$BASEDIR/project_id" ]; then
+    PROJECT=$(sed 's/PROJECT=//g' "$BASEDIR/project_id")
+    #PROJECT="--project-name $PROJECT"
+else
+    frffl=""
+fi
 
-DIRS=\
-'{
-    "writable": [
-        "data"
-    ]
-}'
+container=$(for c in $(docker-compose -f "$BASEDIR/docker-compose.yml" ${frffl-"--project-name"} ${frffl-"$PROJECT"} ps -q mn 2>/dev/null); do
+    if [ "$(docker inspect -f '{{.State.Running}}' "$c" 2>/dev/null)" = "true" ]; then
+        printf "%s" "$c"
+        break
+    fi
+done)
 
-chmod +x "$BASEDIR/"*.sh
-chmod +x "$BASEDIR/../geth"
-chmod +x "$BASEDIR/../dashboard"
-chmod +x "$BASEDIR/../enodeid"
-echo "Configuring access permissions for UID: $INNER_UID"
-for row in $(printf "%s\n" "$DIRS" | jq -r '.writable[]'); do
-    echo "Setting permission for path: $BASEDIR/../$row"
-    chown -R $INNER_UID:ans "$BASEDIR/../$row" && echo "Access permission to '$row' set to uid $INNER_UID."
-done
-exit $?
+docker exec --user xero "$container" /usr/sbin/geth-xero --exec "admin.nodeInfo.enode" attach ipc://./home/xero/.xerom/geth.ipc
