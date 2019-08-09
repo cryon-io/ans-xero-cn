@@ -1,4 +1,4 @@
-#  XERO Node docker template
+#  XERO Chain Node ANS template
 #  Copyright © 2019 cryon.io
 #
 #  This program is free software: you can redistribute it and/or modify

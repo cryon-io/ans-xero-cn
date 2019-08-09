@@ -1,4 +1,4 @@
-## Docker XERO Node © cryon.io 2019
+## ANS XERO Chain Node © cryon.io 2019
 
 Docker template for XERO Node.
 
