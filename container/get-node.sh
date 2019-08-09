@@ -18,8 +18,8 @@
 #
 #  Contact: cryi@tutanota.com
 
-GIT_INFO=$(curl -sL "https://api.github.com/repos/fallengravity/testnet/releases/latest")                                       
-URL=$(printf "%s" "$GIT_INFO" | jq .assets[].browser_download_url -r | grep "geth" | grep linux | grep 64)                        
+GIT_INFO=$(curl -sL "https://api.github.com/repos/xero-official/go-xerom/releases/latest")                                       
+URL=$(printf "%s" "$GIT_INFO" | jq .assets[].browser_download_url -r | grep "geth" | grep linux)                        
 
 if [ -f "./limits.conf" ]; then 
     if grep "NODE_VERSION=" "./limits.conf"; then 
@@ -52,7 +52,7 @@ case "$URL" in
     ;;
 esac
 
-cp -f "$(find . -name geth-linux-amd64)" ./geth 2>/dev/null
+cp -f "$(find . -name geth)" ./geth 2>/dev/null
 
 printf "%s" "$(printf "%s" "$GIT_INFO" | jq .tag_name -r | sed 's\v\\')" > ./version
 
